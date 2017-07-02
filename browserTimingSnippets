@@ -1,0 +1,144 @@
+var count = 0;
+jQuery(document).ajaxComplete(function(event, xhr, settings) {
+  count += xhr.getResponseHeader('Content-Length');
+});
+console.log(count);
+
+var performance = window.performance || window.webkitPerformance || window.mozPerformance || window.msPerformance || {};
+var timings = performance.timing || {};
+console.log(timings);
+
+
+var performance = window.PerformanceResourceTiming ;
+console.log(performance);
+var timings = performance.timing || {};
+console.log(timings);
+
+var timing = window.performance.timing;
+    var userTime = timing.loadEventEnd - timing.navigationStart;
+    var dns = timing.domainLookupEnd - timing.domainLookupStart;
+    var connection = timing.connectEnd - timing.connectStart;
+    var requestTime = timing.responseEnd - timing.requestStart;
+    var fetchTime = timing.responseEnd - timing.fetchStart;
+	
+	
+	window.performance.timing.responseEnd - window.performance.timing.fetchStart
+	
+	jQuery(window).load(function(){
+ setTimeout(function(){
+ window.performance = window.performance || window.mozPerformance || window.msPerformance || window.webkitPerformance || {};
+ var timing = performance.timing || {};
+ var parseTime = timing.loadEventEnd - timing.responseEnd;
+ console.log('Parsetime: ', parseTime);
+ }, 0);
+});
+
+
+var timing = window.performance.timing;
+
+// fall back to less accurate milestones
+var startTime = window.performance.timing.redirectStart ||
+		window.performance.timing.fetchStart ||
+		window.performance.timing.requestStart;
+var endTime = window.performance.timing.domContentLoadedEventEnd ||
+		window.performance.timing.domInteractive ||
+		window.performance.timing.domComplete ||
+		window.performance.timing.loadEventEnd;
+
+if (startTime && endTime && (startTime < endTime)) {
+	console.log(endTime - startTime);
+}
+
+var t = window.performance.timing,
+              interactive = t.domInteractive - t.domLoading,
+              dcl = t.domContentLoadedEventStart - t.domLoading,
+              complete = t.domComplete - t.domLoading;
+var stats = document.createElement('p');
+stats.textContent = 'interactive: ' + interactive + 'ms, ' +
+                'dcl: ' + dcl + 'ms, complete: ' + complete + 'ms';
+				
+				
+				
+=================================
+var t = window.performance.timing,
+              interactive = t.domInteractive - t.domLoading,
+              dcl = t.domContentLoadedEventStart - t.domLoading,
+              complete = t.domComplete - t.domLoading;
+console.log(interactive + "-" + dcl + "-" +complete)
+
+=========================
+console.log(window.performance.timing.domComplete - window.performance.timing.domLoading);   ///////////////GOOOOOOOOOOOOOOOOD ish
+
+=============================================
+
+var ajaxCallCounter = 0; // create counter
+var ajaxReq = new XMLHttpRequest();
+ajaxReq.open('GET', url, true);
+ajaxReq.onload = function(e) {
+window.performance.mark('mark_end_ajax_call'); // set end mark
+ajaxCallCounter++; // counter so I can track each ajax call individually - i could also just use part of the endpoint instead (probably for identifying the call later)
+// break these up into different measures.  Also, by default, the measure method will grab the latest marks for us, so we don't need different mark names
+window.performance.measure('measure_ajax_call_' + ajaxCallCounter, 'mark_start_ajax_call', 'mark_end_ajax_call');
+performAction(e.responseText);
+}
+window.performance.mark('mark_start_ajax_call'); // set start mark
+ajaxReq.send(); // send request
+// later on in the code
+var startTime = window.performance.getEntriesByName('mark_start_ajax_call')[0].startTime; // get start time of first mark
+var cntEndTimes = window.performance.getEntriesByName('mark_end_ajax_call').length; // get the number of end marks
+var endTime = window.performance.getEntriesByName('mark_end_ajax_call')[cntEndTimes-1].startTime; // grab the start time of the last end mark
+var totalTimeSpentOnAjax = (endTime - startTime); // calculate total time spent
+console.log('Ajax calls took ' + totalTimeSpentOnAjax + 'ms');
+ 
+// or you may just want to list out all your measures
+var measures = window.performance.getEntriesByType('measure');
+for (var i = 0; i < measures.length; ++i) {
+var measure = measures[i];
+console.log('Measure: ' + measure.name + ' took ' + measure.duration + 'ms');
+}
+
+
+console.log(window.performance.timing.domComplete - window.performance.timing.domLoading);
+
+window.performance.getEntries()
+
+
+
+    jQuery.ajax({
+        url: 'http://google.com',
+        method: 'GET',
+        start_time: new Date().getTime(),
+        complete: function(data) {
+            alert('This request took '+(new Date().getTime() - this.start_time)+' ms');
+        }
+    });
+	
+	
+	performance.getEntriesByType('resource');
+	
+	
+	var navigationTiming = performance.getEntriesByType("navigation")[0];
+  if (window.console) {
+    console.log("Name: "       + navigationTiming.name      + "\n" +
+                "Entry Type: " + navigationTiming.entryType + "\n" +
+                "Start Time: " + navigationTiming.startTime + "\n" +
+                "Duration: "   + navigationTiming.duration  + "\n" +
+                "Unload: "     + (navigationTiming.unloadEventEnd -
+                                  navigationTiming.unloadEventStart)  + "\n" +
+                "Redirect: "   + (navigationTiming.redirectEnd -
+                                  navigationTiming.redirectStart)     + "\n" +
+                "App Cache: "  + (navigationTiming.domainLookupStart -
+                                  navigationTiming.fetchStart)        + "\n" +
+                "DNS: "        + (navigationTiming.domainLookupEnd -
+                                  navigationTiming.domainLookupStart) + "\n" +
+                "TCP: "        + (navigationTiming.connectEnd -
+                                  navigationTiming.connectStart)      + "\n" +
+                "Request: "    + (navigationTiming.responseStart -
+                                  navigationTiming.requestStart)      + "\n" +
+                "Response: "   + (navigationTiming.responseEnd -
+                                  navigationTiming.responseStart)     + "\n" +
+                "Processing: " + (navigationTiming.loadEventStart -
+                                  navigationTiming.responseEnd)       + "\n" +
+                "Onload: "     + (navigationTiming.loadEventEnd -
+                                  navigationTiming.loadEventStart)    + "\n");
+  }
